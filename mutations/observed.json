@@ -1,0 +1,185 @@
+{
+  "ranAt": "2026-11-23T15:34:05.380Z",
+  "baselineBundle": "02fce6025eea468fa2b2da98d8ea3091",
+  "restoredBundleMatches": true,
+  "killed": 16,
+  "total": 16,
+  "records": [
+    {
+      "id": "M01",
+      "what": "Nakamoto λ = z·p/q instead of z·q/p (brief E1)",
+      "file": "src/race/nakamoto.ts",
+      "owner": "npx vitest run -t \"q = 0\\\\.1, z = 0 … 10 matches the paper\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/race/nakamoto.test.ts > A. Nakamoto §11 double-spend probability > q = 0.1, z = 0 … 10 matches the paper to 7 decimals"
+    },
+    {
+      "id": "M02",
+      "what": "PoW accepts a hash ABOVE the target (brief E2)",
+      "file": "src/pow/mine.ts",
+      "owner": "npx vitest run -t \"12 leading zero bits: first valid nonce 11506\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/pow/mine.test.ts > C. Toy proof of work (single SHA-256) > 12 leading zero bits: first valid nonce 11506"
+    },
+    {
+      "id": "M03",
+      "what": "selfish pool never publishes at lead 1, so no tie ever happens (brief E3)",
+      "file": "src/selfish/sm.ts",
+      "owner": "npx vitest run -t \"lead 1, others find a block\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/selfish/sm.test.ts > The state machine, one transition at a time (α = 0.4, γ = 0.5: pool < 0.4 ≤ others-on-pool < 0.7 ≤ others) > lead 1, others find a block: the pool PUBLISHES and a tie follows; honest miners on the pool's block"
+    },
+    {
+      "id": "M04",
+      "what": "standard quorum Q = 2f, used for n = 3f + 1 (brief E4)",
+      "file": "src/bft/quorum.ts",
+      "owner": "npx vitest run -t \"n = 7, f = 2, Q = n − f = 5\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/bft/quorum.test.ts > D2. Quorum intersection > n = 7, f = 2, Q = n − f = 5: intersection 3, safe and live"
+    },
+    {
+      "id": "M05",
+      "what": "negative-claim sentence deleted from the majority fixture (§4.1d bite, assertion 3)",
+      "file": "src/ui/racePanel.ts",
+      "owner": "npx playwright test --project=claims --retries=0 -g \"the negative claim: six confirmations are reversible by a majority\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:159:3 › displayed claims › the negative claim: six confirmations are reversible by a majority, and selfish mining pays before 50% (5.6s)"
+    },
+    {
+      "id": "M06",
+      "what": "a check inside the fixture broken: the merchant's rule needs MORE than six (§4.1d bite, assertion 2)",
+      "file": "src/race/nakamoto.ts",
+      "owner": "npx playwright test --project=claims --retries=0 -g \"the negative claim: six confirmations are reversible by a majority\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:159:3 › displayed claims › the negative claim: six confirmations are reversible by a majority, and selfish mining pays before 50% (619ms)"
+    },
+    {
+      "id": "M07",
+      "what": "editing the block text no longer retires the mined result",
+      "file": "src/ui/minePanel.ts",
+      "owner": "npx playwright test --project=claims --retries=0 -g \"editing the block text retires the mined result\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:70:3 › displayed claims › editing the block text retires the mined result, and the page says it did (5.9s)"
+    },
+    {
+      "id": "M08",
+      "what": "changing q no longer retires the simulation",
+      "file": "src/ui/racePanel.ts",
+      "owner": "npx playwright test --project=claims --retries=0 -g \"changing q retires the simulation\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:148:3 › displayed claims › changing q retires the simulation, and the page says it did (5.7s)"
+    },
+    {
+      "id": "M09",
+      "what": "Poisson recurrence off by one: λ/(k + 1) instead of λ/k",
+      "file": "src/race/nakamoto.ts",
+      "owner": "npx vitest run -t \"q = 0\\\\.1, z = 0 … 10 matches the paper\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/race/nakamoto.test.ts > A. Nakamoto §11 double-spend probability > q = 0.1, z = 0 … 10 matches the paper to 7 decimals"
+    },
+    {
+      "id": "M10",
+      "what": "selfish threshold denominator 3 − γ instead of 3 − 2γ",
+      "file": "src/selfish/sm.ts",
+      "owner": "npx vitest run -t \"γ = 0 → 1/3, γ = 1/2 → 1/4, γ = 1 → 0\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/selfish/sm.test.ts > B. Selfish-mining threshold (Eyal–Sirer, simplified model) > γ = 0 → 1/3, γ = 1/2 → 1/4, γ = 1 → 0"
+    },
+    {
+      "id": "M11",
+      "what": "quorum called safe when the overlap merely EQUALS f",
+      "file": "src/bft/quorum.ts",
+      "owner": "npx vitest run -t \"n = 6, f = 2, Q = 4: intersection 2 = f\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/bft/quorum.test.ts > D2. Quorum intersection > n = 6, f = 2, Q = 4: intersection 2 = f — flagged, no honest node guaranteed"
+    },
+    {
+      "id": "M12",
+      "what": "race simulation steps the wrong way (attacker gains on 1 − q)",
+      "file": "src/race/nakamoto.ts",
+      "owner": "npx vitest run -t \"q = 0: an attacker with no hash power never catches up\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/race/nakamoto.test.ts > D. The Monte Carlo implements the §11 model (deterministic properties only; agreement is displayed, not gated) > q = 0: an attacker with no hash power never catches up from z ≥ 1"
+    },
+    {
+      "id": "M13",
+      "what": "shipped default RNG swapped for Math.random",
+      "file": "src/rng.ts",
+      "owner": "npx vitest run -t \"the shipped default RNG is crypto\\\\.getRandomValues\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/rng.test.ts > Randomness (batch requirement 3) > the shipped default RNG is crypto.getRandomValues"
+    },
+    {
+      "id": "M14",
+      "what": "nonce encoded little-endian instead of big-endian",
+      "file": "src/pow/mine.ts",
+      "owner": "npx vitest run -t \"12 leading zero bits: first valid nonce 11506\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/pow/mine.test.ts > C. Toy proof of work (single SHA-256) > 12 leading zero bits: first valid nonce 11506"
+    },
+    {
+      "id": "M15",
+      "what": "worst-case layout no longer puts faulty nodes in the overlap",
+      "file": "src/bft/quorum.ts",
+      "owner": "npx vitest run -t \"the worst-case layout puts faulty nodes inside the overlap first\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/bft/quorum.test.ts > F. Fail-closed > the worst-case layout puts faulty nodes inside the overlap first"
+    },
+    {
+      "id": "M16",
+      "what": "gate bite: muted text token darkened below 4.5:1",
+      "file": "src/style.css",
+      "owner": "npx playwright test --project=a11y --retries=0 -g \"dark theme$\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "✘  1 [a11y] › e2e/a11y.spec.ts:27:3 › no WCAG A/AA violations in dark theme (1.9s)"
+    }
+  ]
+}
