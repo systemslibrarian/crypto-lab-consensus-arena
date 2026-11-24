@@ -35,8 +35,8 @@ export const MUTATIONS = [
   {
     id: 'M01', what: 'Nakamoto λ = z·p/q instead of z·q/p (brief E1)',
     file: 'src/race/nakamoto.ts',
-    anchor: 'const lambda = (z * q) / p;\n  let sum = 1;',
-    replace: 'const lambda = (z * p) / q;\n  let sum = 1;',
+    anchor: 'const lambda = (z * q) / p;\n  // Use relative Poisson weights',
+    replace: 'const lambda = (z * p) / q;\n  // Use relative Poisson weights',
     owner: UNIT('q = 0.1, z = 0 … 10 matches the paper'),
   },
   {
@@ -91,8 +91,8 @@ export const MUTATIONS = [
   {
     id: 'M09', what: 'Poisson recurrence off by one: λ/(k + 1) instead of λ/k',
     file: 'src/race/nakamoto.ts',
-    anchor: 'if (k > 0) poisson *= lambda / k;',
-    replace: 'if (k > 0) poisson *= lambda / (k + 1);',
+    anchor: 'mass *= lambda / k;',
+    replace: 'mass *= lambda / (k + 1);',
     owner: UNIT('q = 0.1, z = 0 … 10 matches the paper'),
   },
   {

@@ -33,7 +33,7 @@ export function renderQuorumPanel(root: HTMLElement): void {
       h(
         'div',
         { class: 'readout' },
-        h('p', {}, 'Two quorums of ', String(q), ' out of ', String(n), ' share at least 2Q − n = ', h('strong', { 'data-claim': 'q-intersection' }, String(r.intersection)), ` node${r.intersection === 1 ? '' : 's'}; up to `, h('strong', {}, String(f)), ' of them may be faulty.'),
+        h('p', {}, 'Two quorums of ', String(q), ' out of ', String(n), ' share at least max(0, 2Q − n) = ', h('strong', { 'data-claim': 'q-intersection' }, String(r.intersection)), ` node${r.intersection === 1 ? '' : 's'}; up to `, h('strong', {}, String(f)), ' of them may be faulty.'),
         h(
           'p',
           { class: 'chip-row' },
@@ -45,7 +45,7 @@ export function renderQuorumPanel(root: HTMLElement): void {
     );
     const nodes = layout(r);
     diagram.append(
-      h('p', { class: 'help' }, 'The worst case: quorum A is the first Q nodes, quorum B the last Q, and the faulty nodes sit in the overlap.'),
+      h('p', { class: 'help' }, 'The worst case: quorum A is the first Q nodes, quorum B the last Q, with faulty nodes placed in the overlap first.'),
       h(
         'ul',
         { class: 'node-row', 'aria-label': `${n} nodes` },
@@ -65,6 +65,13 @@ export function renderQuorumPanel(root: HTMLElement): void {
       const bHonest = nodes.filter((x) => x.inB && !x.inA && !x.faulty).length;
       const aFaulty = nodes.filter((x) => x.inA && x.faulty).length;
       const bFaulty = nodes.filter((x) => x.inB && x.faulty).length;
+      if (f === 0 || aHonest === 0 || bHonest === 0) {
+        const explanation = f === 0
+          ? 'The two quorums are disjoint. The quorum size alone cannot guarantee a shared honest voter. There are no faulty participants in this setting.'
+          : 'The illustrated quorums share no honest voter. At least one group contains no honest voter, so this layout does not demonstrate two honest nodes deciding differently.';
+        schedule.append(note('caveat', explanation));
+        return;
+      }
       schedule.append(
         h('h3', {}, 'How it fails: a named protocol and schedule'),
         h(

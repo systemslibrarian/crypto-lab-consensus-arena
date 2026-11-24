@@ -146,7 +146,7 @@ export function renderMinePanel(root: HTMLElement): void {
     reset.disabled = chain.length === 0;
     if (broken) {
       chainNote.append(
-        note('danger', `Rewriting block 0 changed its hash, so its old nonce no longer meets the target and block 1 no longer points at it. To make the rewrite stick, an attacker must redo the work for block 0 and for every block after it — and then out-pace everyone else who is still extending the honest chain. That race is the next exhibit.`),
+        note('danger', `Rewriting block 0 changed its hash, so block 1 no longer points at it. The work badge shows whether the old nonce happened to meet the target for the new header. To make the rewrite stick, an attacker must redo the work for block 0 and for every block after it — and then out-pace everyone else who is still extending the honest chain. That race is the next exhibit.`),
       );
     }
   };

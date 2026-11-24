@@ -143,7 +143,7 @@ export function numberInput(id: string, value: string, width = 8): HTMLInputElem
 }
 
 export const pct = (x: number, digits = 1): string => `${(x * 100).toFixed(digits)}%`;
-export const fmtP = (x: number): string => x.toFixed(7);
+export const fmtP = (x: number): string => x > 0 && x < 0.00000005 ? x.toExponential(3) : x.toFixed(7);
 
 /** A threat-model line (batch requirement 7). */
 export function threatModel(parts: { attacker: string; access: string; trusted: string; success: string; notShown: string }): HTMLElement {

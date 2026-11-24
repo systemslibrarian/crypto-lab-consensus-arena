@@ -13,20 +13,45 @@ export function attackerSuccess(q: number, z: number): number {
   if (!Number.isInteger(z) || z < 0) throw new RangeError(`z = ${z} is not a whole number of blocks`);
   const p = 1 - q;
   if (q >= p) return 1;
+  if (z === 0) return 1;
+  if (q === 0) return 0;
   const lambda = (z * q) / p;
-  let sum = 1;
-  let poisson = Math.exp(-lambda);
-  for (let k = 0; k <= z; k++) {
-    if (k > 0) poisson *= lambda / k;
-    sum -= poisson * (1 - Math.pow(q / p, z - k));
+  // Use relative Poisson weights centred on the mode. Starting at exp(-λ)
+  // underflows for large λ; subtracting near-unit mass loses small results.
+  const mode = Math.floor(lambda);
+  const odds = q / p;
+  let mass = 1;
+  let total = mass;
+  let success = odds ** (z - mode);
+  for (let k = mode; k > 0; k--) {
+    mass *= k / lambda;
+    total += mass;
+    success += mass * odds ** (z - k + 1);
   }
-  return sum;
+  mass = 1;
+  for (let k = mode + 1; ; k++) {
+    mass *= lambda / k;
+    total += mass;
+    success += mass * odds ** Math.max(0, z - k);
+    if (k >= z && mass <= Number.EPSILON * success) break;
+  }
+  return success / total;
 }
 
+export const CONFIRMATION_CAP = 1000;
+
 /** Smallest z with P(q, z) below `target` (the paper's "solving for P less than 0.1%"). */
-export function leastConfirmations(q: number, target = 0.001, cap = 1000): number | null {
-  for (let z = 0; z <= cap; z++) if (attackerSuccess(q, z) < target) return z;
-  return null;
+export function leastConfirmations(q: number, target = 0.001, cap = CONFIRMATION_CAP): number | null {
+  // The catch-up probability is non-increasing with confirmation depth.
+  if (attackerSuccess(q, cap) >= target) return null;
+  let low = 0;
+  let high = cap;
+  while (low < high) {
+    const mid = Math.floor((low + high) / 2);
+    if (attackerSuccess(q, mid) < target) high = mid;
+    else low = mid + 1;
+  }
+  return low;
 }
 
 function poissonSample(lambda: number, rng: Rng): number {
@@ -45,8 +70,8 @@ function poissonSample(lambda: number, rng: Rng): number {
  * Monte Carlo of the SAME model §11 computes: draw the attacker's progress k ~
  * Poisson(λ); if k > z it is already ahead; otherwise play the gambler's-ruin walk
  * from deficit z − k (attacker +1 with probability q, −1 otherwise). The walk is
- * capped at a deficit of 200, where the remaining catch-up probability (q/p)^200 is
- * negligible for every q the page allows below 1/2.
+ * played to a deficit of 200. At or beyond that boundary, sample eventual catch-up
+ * with its exact conditional probability; this still matters near q = 1/2.
  */
 export function simulateRace(
   q: number,
@@ -71,7 +96,7 @@ export function simulateRace(
       continue;
     }
     while (deficit > 0 && deficit < 200) deficit += rng() < q ? -1 : 1;
-    if (deficit <= 0) wins++;
+    if (deficit <= 0 || rng() < (q / p) ** deficit) wins++;
   }
   return { wins, n, requested: n };
 }

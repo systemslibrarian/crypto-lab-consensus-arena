@@ -9,7 +9,7 @@ Browser-based blockchain consensus — real SHA-256 proof of work, the double-sp
 Blockchains agree on one history in one of two ways: by making history expensive to rewrite (proof of work), or by counting signed votes from a known set of nodes (Byzantine fault tolerance). Both hold up to a threshold. This lab computes the thresholds:
 
 - **Proof of work (toy).** Find a nonce such that SHA-256(text ‖ nonce) has at least k leading zero bits — that is, the hash read as a 256-bit integer is below 2^(256 − k). Real WebCrypto SHA-256; every result is re-hashed separately before it is called valid.
-- **Double-spend race.** P(q, z) = 1 − Σ_{k=0}^{z} Poisson(k; λ)·(1 − (q/p)^(z−k)) with λ = z·q/p, from §11 of the Bitcoin paper, beside a Monte Carlo of the same model run in a Web Worker.
+- **Double-spend race.** P(q, z) = 1 − Σ_{k=0}^{z} Poisson(k; λ)·(1 − (q/p)^(z−k)) with λ = z·q/p, from §11 of the Bitcoin paper. It estimates eventual catch-up using the expected time for z honest blocks. A Web Worker samples the same model. The threshold search covers up to 1,000 confirmations.
 - **Selfish mining.** Eyal and Sirer's state machine, their revenue formula (equation 8) and threshold α > (1 − γ)/(3 − 2γ), with a simulation of the state machine.
 - **BFT quorums.** Two quorums of size Q among n nodes overlap in at least 2Q − n; they are guaranteed an honest common node only if 2Q − n > f, and a quorum can form without the faulty nodes only if Q ≤ n − f. Both hold only when n > 3f.
 - **Proof of stake**, in one panel: stake-weighted leader election as Ouroboros uses it.

@@ -36,6 +36,18 @@ describe('A. Nakamoto §11 double-spend probability', () => {
   it('least z with P < 0.001: the paper\'s table, including q = 0.3 → 24', () => {
     for (const [q, z] of PAPER_LEAST) expect(leastConfirmations(q)).toBe(z);
   });
+  it('retains small probabilities and resolves high Poisson means', () => {
+    // Independent log-factorial summation of the Poisson expectation.
+    expect(attackerSuccess(0.1, 40) / 1.0277461494199837e-23).toBeCloseTo(1, 11);
+    expect(attackerSuccess(0.499, 1000)).toBeCloseTo(0.9457302834780013, 10);
+    expect(leastConfirmations(0.499)).toBeNull();
+  });
+  it('samples eventual catch-up at the simulation boundary', () => {
+    // A zero first draw gives zero Poisson arrivals. The second draw is
+    // below the remaining catch-up probability from a deficit of 200.
+    expect(simulateRace(0.499, 200, 1, () => 0).wins).toBe(1);
+    expect(simulateRace(0, 200, 1, () => 0).wins).toBe(0);
+  });
   it('agrees with the unrearranged sum written independently', () => {
     for (const q of [0.05, 0.1, 0.25, 0.4, 0.49]) for (const z of [0, 1, 3, 6, 12, 30]) {
       expect(attackerSuccess(q, z)).toBeCloseTo(unrearranged(q, z), 10);

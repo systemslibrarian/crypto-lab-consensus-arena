@@ -121,6 +121,8 @@ test.describe('displayed claims', () => {
   test('q ≥ 0.5: P = 1 and the page explains why', async ({ page }) => {
     await boot(page, 'dark');
     await openTab(page, /Double-spend race/);
+    await page.locator('#race-q').fill('0.499');
+    await expect(page.locator('[data-claim="least-z"]')).toHaveText('not reached within 1000 confirmations');
     await page.locator('#race-q').fill('0.5');
     await expect(page.locator('[data-claim="p-exact"]')).toHaveText('1.0000000');
     await expect(page.locator('#race-exact .verdict-alarm')).toContainText('catches up with certainty');
@@ -221,5 +223,9 @@ test.describe('displayed claims', () => {
     await expect(page.locator('[data-claim="q-intersection"]')).toHaveText('3');
     await expect(page.locator('[data-verdict="q-safe"]')).toHaveAttribute('data-tone', 'optimal');
     await expect(page.locator('#q-schedule')).toBeEmpty();
+    await page.locator('#q-f').fill('0');
+    await page.locator('#q-q').fill('2');
+    await expect(page.locator('#q-schedule')).toContainText('no faulty participants');
+    await expect(page.locator('#q-steps')).toHaveCount(0);
   });
 });
